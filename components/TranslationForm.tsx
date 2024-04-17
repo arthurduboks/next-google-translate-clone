@@ -12,77 +12,87 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+
 export default function TranslationForm({
   languages,
 }: {
   languages: TranslationLang;
 }) {
+  // state
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
   return (
     <div>
       <form>
-        <Select>
-          <SelectTrigger className="w-[280px]">
-            <SelectValue placeholder="Select a timezone" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>North America</SelectLabel>
-              <SelectItem value="est">Eastern Standard Time (EST)</SelectItem>
-              <SelectItem value="cst">Central Standard Time (CST)</SelectItem>
-              <SelectItem value="mst">Mountain Standard Time (MST)</SelectItem>
-              <SelectItem value="pst">Pacific Standard Time (PST)</SelectItem>
-              <SelectItem value="akst">Alaska Standard Time (AKST)</SelectItem>
-              <SelectItem value="hst">Hawaii Standard Time (HST)</SelectItem>
-            </SelectGroup>
-            <SelectGroup>
-              <SelectLabel>Europe & Africa</SelectLabel>
-              <SelectItem value="gmt">Greenwich Mean Time (GMT)</SelectItem>
-              <SelectItem value="cet">Central European Time (CET)</SelectItem>
-              <SelectItem value="eet">Eastern European Time (EET)</SelectItem>
-              <SelectItem value="west">
-                Western European Summer Time (WEST)
-              </SelectItem>
-              <SelectItem value="cat">Central Africa Time (CAT)</SelectItem>
-              <SelectItem value="eat">East Africa Time (EAT)</SelectItem>
-            </SelectGroup>
-            <SelectGroup>
-              <SelectLabel>Asia</SelectLabel>
-              <SelectItem value="msk">Moscow Time (MSK)</SelectItem>
-              <SelectItem value="ist">India Standard Time (IST)</SelectItem>
-              <SelectItem value="cst_china">
-                China Standard Time (CST)
-              </SelectItem>
-              <SelectItem value="jst">Japan Standard Time (JST)</SelectItem>
-              <SelectItem value="kst">Korea Standard Time (KST)</SelectItem>
-              <SelectItem value="ist_indonesia">
-                Indonesia Central Standard Time (WITA)
-              </SelectItem>
-            </SelectGroup>
-            <SelectGroup>
-              <SelectLabel>Australia & Pacific</SelectLabel>
-              <SelectItem value="awst">
-                Australian Western Standard Time (AWST)
-              </SelectItem>
-              <SelectItem value="acst">
-                Australian Central Standard Time (ACST)
-              </SelectItem>
-              <SelectItem value="aest">
-                Australian Eastern Standard Time (AEST)
-              </SelectItem>
-              <SelectItem value="nzst">
-                New Zealand Standard Time (NZST)
-              </SelectItem>
-              <SelectItem value="fjt">Fiji Time (FJT)</SelectItem>
-            </SelectGroup>
-            <SelectGroup>
-              <SelectLabel>South America</SelectLabel>
-              <SelectItem value="art">Argentina Time (ART)</SelectItem>
-              <SelectItem value="bot">Bolivia Time (BOT)</SelectItem>
-              <SelectItem value="brt">Brasilia Time (BRT)</SelectItem>
-              <SelectItem value="clt">Chile Standard Time (CLT)</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <div>
+          <Select name="inputLanguage" defaultValue="auto">
+            <SelectTrigger className="w-[280px]">
+              <SelectValue placeholder="Select a language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Want us to figure it out?</SelectLabel>
+                <SelectItem key="auto" value="auto">
+                  Auto-Detect
+                </SelectItem>
+              </SelectGroup>
+
+              <SelectGroup>
+                <SelectLabel>Language</SelectLabel>
+                {Object.entries(languages.translation).map(([key, value]) => (
+                  <SelectItem key={key} value={key}>
+                    {value.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Textarea
+            placeholder="Type your text here."
+            className="min-h-32 text-xl"
+            name="input"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+        </div>
+        {/* output div */}
+        <div>
+          <Select name="outputLanguage" defaultValue="en">
+            <SelectTrigger className="w-[280px]">
+              <SelectValue placeholder="Select a language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Want us to figure it out?</SelectLabel>
+                <SelectItem key="auto" value="auto">
+                  Auto-Detect
+                </SelectItem>
+              </SelectGroup>
+
+              <SelectGroup>
+                <SelectLabel>Language</SelectLabel>
+                {Object.entries(languages.translation).map(([key, value]) => (
+                  <SelectItem key={key} value={key}>
+                    {value.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Textarea
+            placeholder="Type your text here."
+            className="min-h-32 text-xl"
+            name="output"
+            value={output}
+            onChange={(e) => setOutput(e.target.value)}
+          />
+        </div>
+        {/* submit  */}
+        <div>
+          <button type="submit">Submit</button>
+        </div>
       </form>
     </div>
   );
