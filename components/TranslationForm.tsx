@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 
 const initialState = {
@@ -31,10 +31,18 @@ export default function TranslationForm({
 }: {
   languages: TranslationLang;
 }) {
-  // state
+  // State
   const [state, formAction] = useFormState(translate, initialState);
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
+
+  console.log(state);
+
+  useEffect(() => {
+    if (state.output) {
+      setOutput(state.output);
+    }
+  }, [state]);
   return (
     <div>
       <form action={formAction}>
