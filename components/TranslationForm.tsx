@@ -15,7 +15,7 @@ import {
 
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
 import logoPng from "/public/Google_Translate_logo_.png";
 
@@ -38,7 +38,19 @@ export default function TranslationForm({
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
 
-  console.log(state);
+  const submitBtnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!input.trim()) return;
+
+    const delayDebounceFn = setTimeout(() => {
+      // Submit form
+      submitBtnRef.current?.click();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [input]);
+
+  // console.log(state);
 
   useEffect(() => {
     if (state.output) {
@@ -128,7 +140,9 @@ export default function TranslationForm({
         </div>
         {/* submit  */}
         <div>
-          <button type="submit">Submit</button>
+          <button type="submit" ref={submitBtnRef}>
+            Submit
+          </button>
         </div>
       </form>
     </div>
