@@ -51,6 +51,23 @@ async function translate(prevState: State, formData: FormData) {
   }
 
   // Mongo  DB push
+  if (rawFormData.inputLanguage === "auto") {
+    rawFormData.inputLanguage = data[0].detectedLanguage.language;
+  }
+
+  try {
+    const translation = {
+      to: rawFormData.outputLanguage,
+      from: rawFormData.inputLanguage,
+      fromText: rawFormData.input,
+      toText: data[0].translations[0].text,
+    };
+
+    addOrUpdateUser(userId, translation);
+  } catch (error) {
+    console.error("Error adding translation.");
+  }
+
   return { ...prevState, output: data[0].translations[0].text };
 }
 
