@@ -1,6 +1,7 @@
 "use server";
 
 import { State } from "@/components/TranslationForm";
+import { addOrUpdateUser } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
 import axios from "axios";
 import { v4 } from "uuid";
@@ -50,7 +51,7 @@ async function translate(prevState: State, formData: FormData) {
     console.log(`Error ${data.error.code}: ${data.error.message}`);
   }
 
-  // Mongo  DB push
+  // Mongo DB push
   if (rawFormData.inputLanguage === "auto") {
     rawFormData.inputLanguage = data[0].detectedLanguage.language;
   }
