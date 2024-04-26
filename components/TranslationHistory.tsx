@@ -1,4 +1,3 @@
-import { ITranslation } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
 
 async function TranslationHistory() {
@@ -15,9 +14,6 @@ async function TranslationHistory() {
       tags: ["translationHistory"],
     },
   });
-
-  const { translations }: { translations: Array<ITranslation> } =
-    await res.json();
 
   return <div>TranslationHistory</div>;
 }

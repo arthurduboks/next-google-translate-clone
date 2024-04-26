@@ -1,10 +1,12 @@
 "use server";
 
 import { State } from "@/components/TranslationForm";
+import connectDB from "@/mongodb/db";
 import { addOrUpdateUser } from "@/mongodb/models/User";
-import { auth } from "@clerk/nextjs/server";
 import axios from "axios";
 import { v4 } from "uuid";
+import { auth } from "@clerk/nextjs/server";
+import { revalidateTag } from "next/cache";
 
 const key = process.env.AZURE_TEXT_TRANSLATION_KEY;
 const endpoint = process.env.AZURE_TEXT_TRANSLATION;
@@ -12,8 +14,10 @@ const location = process.env.AZURE_TEXT_LOCATION;
 
 async function translate(prevState: State, formData: FormData) {
   auth().protect();
+
   const { userId } = auth();
-  if (!userId) throw new Error("User not found.");
+
+  if (!userId) throw new Error("User not found");
 
   const rawFormData = {
     input: formData.get("input") as string,
@@ -21,8 +25,8 @@ async function translate(prevState: State, formData: FormData) {
     output: formData.get("output") as string,
     outputLanguage: formData.get("outputLanguage") as string,
   };
-  // Azure request
-  const res = await axios({
+
+  const response = await axios({
     baseURL: endpoint,
     url: "translate",
     method: "POST",
@@ -45,13 +49,16 @@ async function translate(prevState: State, formData: FormData) {
     ],
     responseType: "json",
   });
-  const data = res.data;
+
+  const data = response.data;
 
   if (data.error) {
     console.log(`Error ${data.error.code}: ${data.error.message}`);
   }
 
-  // Mongo DB push
+  // Mongo DB
+  await connectDB();
+
   if (rawFormData.inputLanguage === "auto") {
     rawFormData.inputLanguage = data[0].detectedLanguage.language;
   }
@@ -65,11 +72,16 @@ async function translate(prevState: State, formData: FormData) {
     };
 
     addOrUpdateUser(userId, translation);
-  } catch (error) {
-    console.error("Error adding translation.");
+  } catch (err) {
+    console.error(err);
   }
 
-  return { ...prevState, output: data[0].translations[0].text };
+  revalidateTag("translationHistory");
+
+  return {
+    ...prevState,
+    output: data[0].translations[0].text,
+  };
 }
 
 export default translate;
