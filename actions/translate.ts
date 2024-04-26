@@ -56,7 +56,7 @@ async function translate(prevState: State, formData: FormData) {
     console.log(`Error ${data.error.code}: ${data.error.message}`);
   }
 
-  // Mongo DB
+  // MongoDB push
   await connectDB();
 
   if (rawFormData.inputLanguage === "auto") {
