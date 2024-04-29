@@ -18,6 +18,9 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
 import logoPng from "/public/Google_Translate_logo_.png";
+import SubmitButton from "./SubmitButton";
+import { Button } from "./ui/button";
+import { Volume2Icon } from "lucide-react";
 
 const initialState = {
   inputLanguages: "auto",
@@ -57,6 +60,13 @@ export default function TranslationForm({
       setOutput(state.output);
     }
   }, [state]);
+
+  const playAudio = async () => {
+    const synth = window.speechSynthesis;
+    if (!output || !synth) return;
+    const utterance = new SpeechSynthesisUtterance(output);
+    synth.speak(utterance);
+  };
   return (
     <div>
       <div className="flex space-x-2">
@@ -97,6 +107,7 @@ export default function TranslationForm({
                 </SelectGroup>
               </SelectContent>
             </Select>
+
             <Textarea
               placeholder="Type your text here."
               className="min-h-32 text-xl"
@@ -107,28 +118,44 @@ export default function TranslationForm({
           </div>
           {/* output div */}
           <div className="flex-1 space-y-2">
-            <Select name="outputLanguage" defaultValue="en">
-              <SelectTrigger className="w-[280px] border-none text-blue-500 font-bold">
-                <SelectValue placeholder="Select a language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Want us to figure it out?</SelectLabel>
-                  <SelectItem key="auto" value="auto">
-                    Auto-Detect
-                  </SelectItem>
-                </SelectGroup>
-
-                <SelectGroup>
-                  <SelectLabel>Language</SelectLabel>
-                  {Object.entries(languages.translation).map(([key, value]) => (
-                    <SelectItem key={key} value={key}>
-                      {value.name}
+            <div className="flex items-center justify-between">
+              <Select name="outputLanguage" defaultValue="en">
+                <SelectTrigger className="w-[280px] border-none text-blue-500 font-bold">
+                  <SelectValue placeholder="Select a language" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Want us to figure it out?</SelectLabel>
+                    <SelectItem key="auto" value="auto">
+                      Auto-Detect
                     </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+                  </SelectGroup>
+
+                  <SelectGroup>
+                    <SelectLabel>Language</SelectLabel>
+                    {Object.entries(languages.translation).map(
+                      ([key, value]) => (
+                        <SelectItem key={key} value={key}>
+                          {value.name}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+
+              <Button
+                variant="ghost"
+                type="button"
+                onClick={playAudio}
+                disabled={!output}
+              >
+                <Volume2Icon
+                  size={24}
+                  className="text-blue-500 cursor-pointer disabled:cursor-not-allowed"
+                />
+              </Button>
+            </div>
             <Textarea
               placeholder="Type your text here."
               className="min-h-32 text-xl"
@@ -139,10 +166,9 @@ export default function TranslationForm({
           </div>
         </div>
         {/* submit  */}
-        <div>
-          <button type="submit" ref={submitBtnRef}>
-            Submit
-          </button>
+        <div className="mt-4 flex justify-end">
+          <SubmitButton disabled={!input} />
+          <button type="submit" ref={submitBtnRef} hidden />
         </div>
       </form>
     </div>

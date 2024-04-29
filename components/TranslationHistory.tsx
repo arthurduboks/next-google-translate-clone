@@ -1,6 +1,7 @@
 import { ITranslation } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
 import TimeAgoText from "./TimeAgoText";
+import DeleteTranslationButton from "./DeleteTranslationButton";
 
 const getLanguage = (code: string) => {
   const lang = new Intl.DisplayNames(["en"], { type: "language" });
@@ -57,7 +58,7 @@ async function TranslationHistory() {
               />
             </p>
 
-            {/* <DeleteTranslationButton id={translation._id} /> */}
+            <DeleteTranslationButton id={translation._id} />
           </li>
         ))}
       </ul>

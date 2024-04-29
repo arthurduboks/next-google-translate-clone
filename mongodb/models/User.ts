@@ -90,4 +90,28 @@ export async function getTranslations(
     throw err;
   }
 }
+
+export async function removeTranslation(
+  userId: string,
+  translationId: string
+): Promise<IUser> {
+  await connectDB();
+
+  try {
+    const user: IUser | null = await User.findOneAndUpdate(
+      { userId: userId },
+      { $pull: { translations: { _id: translationId } } },
+      { new: true }
+    );
+    if (!user) {
+      throw new Error("User not found.");
+    }
+    console.log("Translation deleted.", user);
+    return user;
+  } catch (err) {
+    console.error("Error removing translation from user: ", err);
+    throw err;
+  }
+}
+
 export default User;
