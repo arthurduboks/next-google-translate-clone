@@ -21,6 +21,7 @@ import logoPng from "/public/Google_Translate_logo_.png";
 import SubmitButton from "./SubmitButton";
 import { Button } from "./ui/button";
 import { Volume2Icon } from "lucide-react";
+import Recorder from "./Recorder";
 
 const initialState = {
   inputLanguages: "auto",
@@ -67,6 +68,12 @@ export default function TranslationForm({
     const utterance = new SpeechSynthesisUtterance(output);
     synth.speak(utterance);
   };
+
+  const uploadAudio = async (blob: Blob) => {
+    const mimeType = "audio/webm";
+
+    const file = new File([blob], mimeType, { type: mimeType });
+  };
   return (
     <div>
       <div className="flex space-x-2">
@@ -80,6 +87,7 @@ export default function TranslationForm({
           </p>
         </div>
         {/* Voice recorder */}
+        <Recorder uploadAudio={uploadAudio} />
       </div>
 
       <form action={formAction}>
