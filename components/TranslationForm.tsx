@@ -76,21 +76,21 @@ export default function TranslationForm({
   };
   return (
     <div>
-      <div className="flex space-x-2">
-        <div
-          className="flex items-center group cursor-pointer border rounded-sm
-        w-fit px-3 py-2 bg-[#E7F0FE] mb-5"
-        >
-          <Image src={logoPng} alt="logo" width={30} height={30} />
-          <p className="text-sm font-medium text-blue-500 group-hover:underline ml-2 mt-1">
-            Text
-          </p>
-        </div>
-        {/* Voice recorder */}
-        <Recorder uploadAudio={uploadAudio} />
-      </div>
-
       <form action={formAction}>
+        <div className="flex space-x-2">
+          <div
+            className="flex items-center group cursor-pointer border rounded-sm
+        w-fit px-3 py-2 bg-[#E7F0FE] mb-5"
+          >
+            <Image src={logoPng} alt="logo" width={30} height={30} />
+            <p className="text-sm font-medium text-blue-500 group-hover:underline ml-2 mt-1">
+              Text
+            </p>
+          </div>
+          {/* Voice recorder */}
+          <Recorder uploadAudio={uploadAudio} />
+        </div>
+
         <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
           <div className="flex-1 space-y-2">
             <Select name="inputLanguage" defaultValue="auto">
