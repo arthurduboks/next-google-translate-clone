@@ -11,8 +11,9 @@ export default function Home() {
   const url = `${
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : `https://${process.env.VERCEL_URL}`
+      : process.env.VERCEL_URL
   }/translate`;
+
   return (
     <main className="flex flex-col items-center justify-center p-10">
       <h1 className="text-3xl lg:text-6xl text-center pb-10 mb-5 font-light">

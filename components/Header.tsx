@@ -5,13 +5,20 @@ import logo from "/public/Google-Translate-Logo.png";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 
 function Header() {
-  const { userId } = auth();
+  let userId;
+  try {
+    const { userId: authUserId } = auth();
+    userId = authUserId;
+  } catch (error) {
+    console.error("Failed to authenticate:", error);
+  }
 
   const url = `${
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : `https://${process.env.VERCEL_URL}`
+      : process.env.VERCEL_URL
   }/translate`;
+  console.log("URL for SignInButton:", url); // Log for debugging
 
   return (
     <header className="flex items-center justify-between px-8 border-b mb-5">
@@ -36,4 +43,5 @@ function Header() {
     </header>
   );
 }
+
 export default Header;
