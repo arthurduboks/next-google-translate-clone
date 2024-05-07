@@ -73,7 +73,21 @@ export default function TranslationForm({
     const mimeType = "audio/webm";
 
     const file = new File([blob], mimeType, { type: mimeType });
+
+    const formData = new FormData();
+    formData.append("audio", file);
+
+    const res = await fetch("/transcribeAudio", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+
+    if (data.text) {
+      setInput(data.text);
+    }
   };
+
   return (
     <div>
       <form action={formAction}>

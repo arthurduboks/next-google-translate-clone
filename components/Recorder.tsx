@@ -2,13 +2,11 @@
 
 import { MicIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
 
 export const mimeType = "audio/webm";
 
 function Recorder({ uploadAudio }: { uploadAudio: (blob: Blob) => void }) {
   const mediaRecorder = useRef<MediaRecorder | null>(null);
-  const { pending } = useFormStatus();
   const [permission, setPermission] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
@@ -36,7 +34,7 @@ function Recorder({ uploadAudio }: { uploadAudio: (blob: Blob) => void }) {
   };
 
   const startRecording = async () => {
-    if (stream === null || pending) return;
+    if (stream === null) return;
     setRecordingStatus("recording");
 
     const media = new MediaRecorder(stream, { mimeType });
@@ -56,7 +54,7 @@ function Recorder({ uploadAudio }: { uploadAudio: (blob: Blob) => void }) {
   };
 
   const stopRecording = async () => {
-    if (mediaRecorder.current === null || pending) return;
+    if (mediaRecorder.current === null) return;
 
     setRecordingStatus("inactive");
     mediaRecorder.current.stop();
@@ -80,15 +78,9 @@ function Recorder({ uploadAudio }: { uploadAudio: (blob: Blob) => void }) {
         <button onClick={askPermission}>Allow microphone access</button>
       )}
 
-      {pending && (
-        <p>
-          {recordingStatus === "recording"
-            ? "Recording..."
-            : "Stop recording..."}
-        </p>
-      )}
+      {/* {pending && <p>Translating</p>} */}
 
-      {permission && recordingStatus === "inactive" && !pending && (
+      {permission && recordingStatus === "inactive" && (
         <button
           onClick={startRecording}
           className="text-sm font-medium group-hover:underline ml-2 mt-1"
