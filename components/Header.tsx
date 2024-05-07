@@ -6,6 +6,13 @@ import { SignInButton, UserButton } from "@clerk/nextjs";
 
 function Header() {
   const { userId } = auth();
+
+  const url = `${
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : process.env.VERCEL_URL
+  }/translate`;
+
   return (
     <header className="flex items-center justify-between px-8 border-b mb-5">
       <div className="flex items-center h-20">
@@ -24,7 +31,7 @@ function Header() {
           <UserButton />
         </div>
       ) : (
-        <SignInButton afterSignInUrl="/translate" mode="modal" />
+        <SignInButton afterSignInUrl={url} mode="modal" />
       )}
     </header>
   );
