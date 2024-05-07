@@ -11,11 +11,13 @@ const getLanguage = (code: string) => {
 async function TranslationHistory() {
   const { userId } = auth();
 
-  const url = `${
+  // Ensuring the URL always has the correct protocol
+  const baseUrl =
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : process.env.VERCEL_URL
-  }/translationHistory?userId=${userId}`;
+      : `https://${process.env.VERCEL_URL}`;
+
+  const url = `${baseUrl}/translationHistory?userId=${userId}`;
 
   const res = await fetch(url, {
     next: {
