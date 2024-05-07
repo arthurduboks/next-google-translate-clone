@@ -22,31 +22,13 @@ async function TranslatePage() {
   const langEndpoint =
     "https://api.cognitive.microsofttranslator.com/languages?api-version=3.0";
 
-  let languages;
-  try {
-    const res = await fetch(langEndpoint, {
-      next: {
-        revalidate: 60 * 60 * 24, // 24 hour cache
-      },
-    });
+  const res = await fetch(langEndpoint, {
+    next: {
+      revalidate: 60 * 60 * 24, // 24 hour cache
+    },
+  });
 
-    if (!res.ok) {
-      throw new Error(`API responded with status: ${res.status}`);
-    }
-
-    const responseBody = await res.text();
-
-    try {
-      languages = JSON.parse(responseBody) as TranslationLang;
-    } catch (error) {
-      console.error("Failed to parse JSON:", responseBody);
-      throw error;
-    }
-  } catch (error) {
-    console.error("Error fetching languages:", error);
-
-    languages = { translation: {} } as TranslationLang;
-  }
+  const languages = (await res.json()) as TranslationLang;
 
   return (
     <div className="px-10 lg:px-0 mb-20">
