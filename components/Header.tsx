@@ -38,7 +38,7 @@ function Header() {
           <UserButton />
         </div>
       ) : (
-        <SignInButton afterSignInUrl={url} mode="modal" />
+        <SignInButton forceRedirectUrl={url} mode="modal" />
       )}
     </header>
   );
