@@ -13,7 +13,6 @@ export default function Home() {
       ? "http://localhost:3000"
       : process.env.VERCEL_URL
   }/translate`;
-
   return (
     <main className="flex flex-col items-center justify-center p-10">
       <h1 className="text-3xl lg:text-6xl text-center pb-10 mb-5 font-light">
