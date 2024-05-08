@@ -25,7 +25,10 @@ async function TranslationHistory() {
     });
 
     if (!res.ok) {
-      throw new Error(`Failed to fetch translation history: ${res.status}`);
+      const errorBody = await res.text();
+      throw new Error(
+        `Failed to fetch translation history: ${res.status} - ${errorBody}`
+      );
     }
 
     const { translations }: { translations: Array<ITranslation> } =
