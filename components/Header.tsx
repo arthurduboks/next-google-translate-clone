@@ -38,7 +38,7 @@ function Header() {
           <UserButton />
         </div>
       ) : (
-        <SignInButton fallbackRedirectUrl={url} mode="modal" />
+        <SignInButton signUpForceRedirectUrl={url} mode="modal" />
       )}
     </header>
   );

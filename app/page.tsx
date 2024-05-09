@@ -29,7 +29,7 @@ export default function Home() {
         </Link>
       ) : (
         <Button className="bg-blue-500 hover:bg-blue-600 w-full mt-10 lg:w-fit p-5">
-          <SignInButton fallbackRedirectUrl={url} mode="modal">
+          <SignInButton signUpForceRedirectUrl={url} mode="modal">
             Sign In to Start Translating
           </SignInButton>
         </Button>
